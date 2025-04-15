@@ -7,8 +7,9 @@ BUILD_DIR = target
 BOOT_DIR = boot
 KERNEL_NAME = kernel.elf
 
-CFLAGS = -target $(ARCH) -ffreestanding -nostdlib -mno-red-zone \
-         -mcmodel=kernel -Isrc/include -O2 -Wall -Wextra \
+CFLAGS = -target $(ARCH) -ffreestanding -nostdlib -mno-red-zone -std=c23 -m64\
+         -fno-stack-protector -fno-stack-check \
+				 -mcmodel=kernel -Isrc/include -O2 -Wall -Wextra \
          -fno-stack-protector -fno-pic -mno-80387
 
 
