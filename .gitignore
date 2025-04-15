@@ -50,3 +50,14 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+src/include/limine.h
+*.json
+*.iso
+
+.cache
+
+target/
+
+tools/bin
+tools/limine
