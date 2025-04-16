@@ -30,8 +30,17 @@ int serial_init()
 
 void serial_putc(char c)
 {
-  while ((inb(COM1 + 5) & 0x20) == 0); // wait for tx buffer
+  while ((inb(COM1 + 5) & 0x20) == 0)
+    ; // wait for tx buffer
   outb(COM1, c);
+}
+
+void serial_puts(const char *str)
+{
+  while (*str)
+  {
+    serial_putc(*str++);
+  }
 }
 
 void serial_printf(const char *format, ...)
@@ -46,5 +55,3 @@ void _putchar(char c)
 {
   serial_putc(c);
 }
-
-

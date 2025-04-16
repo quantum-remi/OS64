@@ -7,10 +7,21 @@ BUILD_DIR = target
 BOOT_DIR = boot
 KERNEL_NAME = kernel.elf
 
-CFLAGS = -target $(ARCH) -ffreestanding -nostdlib -mno-red-zone -std=c23 -m64\
-         -fno-stack-protector -fno-stack-check \
-				 -mcmodel=kernel -Isrc/include -O2 -Wall -Wextra \
-         -fno-stack-protector -fno-pic -mno-80387
+CFLAGS = -target $(ARCH) -nostdlib -std=c23 -m64\
+-mcmodel=kernel -Isrc/include -O0 -Wall -Wextra -Werror\
+-ffreestanding \
+    -fno-stack-protector \
+    -fno-stack-check \
+    -fno-PIC \
+    -ffunction-sections \
+    -fdata-sections \
+    -m64 \
+	-g -c \
+    -march=x86-64 \
+    -mno-80387 \
+    -mno-mmx \
+    -mno-red-zone \
+    -mcmodel=kernel
 
 
 ASFLAGS = -target $(ARCH) -ffreestanding -nostdlib
@@ -22,8 +33,11 @@ LIB_SRCS := $(shell find src/libs -name '*.c' -o -name '*.S')
 USERSPACE_SRCS := $(shell find src/userspace -name '*.c' -o -name '*.S')
 
 ALL_SRCS = $(KERNEL_SRCS) $(LIB_SRCS) $(USERSPACE_SRCS)
-OBJS = $(patsubst src/%,$(BUILD_DIR)/%,$(ALL_SRCS:.c=.o))
+OBJS = $(patsubst src/%,$(BUILD_DIR)/%,$(ALL_SRCS:.c=.o)) $(FONT_OBJ)
 OBJS := $(OBJS:.S=.o)
+
+FONT = src/kernel/fonts/ter-powerline-v20b.psf
+FONT_OBJ = $(BUILD_DIR)/kernel/fonts/font.o
 
 PATH_TOOLS := $(abspath tools/bin)
 LIMINE_DIR := $(abspath tools/limine)
@@ -52,6 +66,15 @@ $(BUILD_DIR)/%.o: src/%.S
 	@echo "AS $<"
 	@$(CC) $(ASFLAGS) -c $< -o $@
 
+$(FONT_OBJ): $(FONT)
+	@mkdir -p $(dir $@)
+	@echo "OBJCOPY $<"
+	@objcopy -O elf64-x86-64 -B i386 -I binary $< $@
+	@objcopy \
+		--redefine-sym _binary_$(subst /,_,$(subst .,_,$(subst -,_,$(subst _,_,$<))))_start=_psf2_font_start \
+		--redefine-sym _binary_$(subst /,_,$(subst .,_,$(subst -,_,$(subst _,_,$<))))_end=_psf2_font_end \
+		--redefine-sym _binary_$(subst /,_,$(subst .,_,$(subst -,_,$(subst _,_,$<))))_size=_psf2_font_size \
+		$@
 
 $(ISO_NAME): $(BUILD_DIR)/$(KERNEL_NAME) $(BOOT_DIR)/limine.conf
 	@echo "Building ISO image..."

@@ -2,6 +2,6 @@
 
 #include <stdint.h>
 
-void serial_init();
+int serial_init();
 void serial_putc(char c);
-void serial_printf(const char* str);
+void serial_printf(const char *format, ...);
