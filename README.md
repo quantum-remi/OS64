@@ -6,12 +6,12 @@
 ** goal for that project is to create 64bit operatins system that's stable enough for use with x11 server **
 
 - [x] Booting with limine
-- [x] Basic AMD64 setup
-    - GDT
-    - IDT
+- [-] Basic AMD64 setup
+    - [x] GDT
+    - [ ] IDT
 - [x] Basic kernel logs
-    - Serial logs
-    - Framebuffer driver
+    - [x] Serial logs
+    - [x] Framebuffer driver
 - [ ] Memory manager setup
     - [ ] PMM
     - [ ] VMM
