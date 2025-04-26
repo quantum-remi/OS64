@@ -61,3 +61,4 @@ target/
 
 tools/bin
 tools/limine
+*.swp
