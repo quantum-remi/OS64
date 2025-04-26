@@ -4,6 +4,7 @@
 #include "string.h"
 #include "serial.h"
 #include "gop.h"
+#include "gdt.h"
 
 #include <limine.h>
 
@@ -44,9 +45,13 @@ void kmain(void)
 
   serial_printf("=== Boot Sequence Started ===\n");
 
+  gdt_init();
+  serial_printf("GDT loaded successfully\n");
+
   gop_init(&gop_ctx);
   gop_clear(&gop_ctx);
-  gop_draw_string(&gop_ctx, "GOP Driver Active\nSystem Ready");
+  gop_draw_string(&gop_ctx, "WEEZO OS\n");
+  gop_draw_string(&gop_ctx, "WITH MULTIPLE LINES SUPPORT");
 
 
   for(;;)

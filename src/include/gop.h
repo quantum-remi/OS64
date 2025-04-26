@@ -16,8 +16,29 @@ struct gop_context
     size_t cursor_x;
     size_t cursor_y;
     uint32_t (*rgb_to_native)(struct gop_context *ctx, uint8_t r, uint8_t g, uint8_t b);
+    enum
+    {
+        FONT_PSF1,
+        FONT_PSF2
+    } font_type;
+    union
+    {
+        struct psf1_header *psf1;
+        struct psf2_header *psf2;
+    } font_header;
+    uint16_t font_width;
+    uint16_t font_height;
 };
 
+#define PSF1_MAGIC 0x0436
+struct psf1_header
+{
+    uint16_t magic;
+    uint8_t mode;
+    uint8_t char_size;
+};
+
+#define PSF2_MAGIC 0x864ab572
 struct psf2_header
 {
     uint32_t magic;

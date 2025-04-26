@@ -1,6 +1,6 @@
 CC = clang
 LD = ld.lld
-AS = clang
+AS = nasm
 
 ARCH = x86_64-elf
 BUILD_DIR = target
@@ -16,19 +16,19 @@ CFLAGS = -target $(ARCH) -nostdlib -std=c23 -m64\
     -ffunction-sections \
     -fdata-sections \
     -m64 \
-	-g -c \
+		-g -c \
     -march=x86-64 \
-    -mno-80387 \
+		-mno-80387 \
     -mno-mmx \
     -mno-red-zone \
     -mcmodel=kernel
 
 
-ASFLAGS = -target $(ARCH) -ffreestanding -nostdlib
+ASFLAGS := -f elf64 -g
 
 LDFLAGS = -T $(BOOT_DIR)/linker.ld -nostdlib --gc-sections
 
-KERNEL_SRCS := $(shell find src/kernel -name '*.c' -o -name '*.S')
+KERNEL_SRCS := $(shell find src/kern -name '*.c' -o -name '*.S')
 LIB_SRCS := $(shell find src/libs -name '*.c' -o -name '*.S')
 USERSPACE_SRCS := $(shell find src/userspace -name '*.c' -o -name '*.S')
 
@@ -36,8 +36,8 @@ ALL_SRCS = $(KERNEL_SRCS) $(LIB_SRCS) $(USERSPACE_SRCS)
 OBJS = $(patsubst src/%,$(BUILD_DIR)/%,$(ALL_SRCS:.c=.o)) $(FONT_OBJ)
 OBJS := $(OBJS:.S=.o)
 
-FONT = src/kernel/fonts/ter-powerline-v20b.psf
-FONT_OBJ = $(BUILD_DIR)/kernel/fonts/font.o
+FONT = src/kern/fonts/gohufont.psf
+FONT_OBJ = $(BUILD_DIR)/kern/fonts/font.o
 
 PATH_TOOLS := $(abspath tools/bin)
 LIMINE_DIR := $(abspath tools/limine)
@@ -63,8 +63,8 @@ $(BUILD_DIR)/%.o: src/%.c
 
 $(BUILD_DIR)/%.o: src/%.S
 	@mkdir -p $(dir $@)
-	@echo "AS $<"
-	@$(CC) $(ASFLAGS) -c $< -o $@
+	@echo "NASM  $<"
+	@$(AS) $(ASFLAGS) $< -o $@
 
 $(FONT_OBJ): $(FONT)
 	@mkdir -p $(dir $@)
