@@ -16,10 +16,9 @@ struct gdt_ptr {
     uint64_t base;
 } __attribute__((packed));
 
-// TSS structure (simplified)
 struct tss_entry {
     uint32_t reserved0;
-    uint64_t rsp0;     // Kernel stack pointer
+    uint64_t rsp0;    
     uint64_t rsp1;
     uint64_t rsp2;
     uint64_t reserved1;
@@ -36,4 +35,5 @@ struct tss_entry {
 } __attribute__((packed));
 
 void gdt_init(void);
+void tss_load(void);
 extern void gdt_load(uint64_t gdt_ptr); // ASM function

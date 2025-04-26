@@ -8,7 +8,8 @@
 - [x] Booting with limine
 - [ ] Basic AMD64 setup
     - [x] GDT
-    - [ ] IDT
+    - [x] IDT
+    - [x] IRQ
 - [x] Basic kernel logs
     - [x] Serial logs
     - [x] Framebuffer driver
