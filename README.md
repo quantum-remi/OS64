@@ -3,7 +3,7 @@
 
 ## ROADMAP
 
-** goal for that project is to create 64bit operatins system that's stable enough for use with x11 server **
+**goal for that project is to create 64bit operatins system that's stable enough for use with x11 server**
 
 - [x] Booting with limine
 - [ ] Basic AMD64 setup
