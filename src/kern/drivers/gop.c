@@ -34,7 +34,6 @@ void gop_init(struct gop_context *ctx)
 
     if (*(uint32_t *)_psf2_font_start == PSF2_MAGIC)
     {
-        // PSF2 font handling
         ctx->font_type = FONT_PSF2;
         ctx->font_header.psf2 = (struct psf2_header *)_psf2_font_start;
         ctx->font_width = ctx->font_header.psf2->width;
@@ -42,7 +41,6 @@ void gop_init(struct gop_context *ctx)
     }
     else if (*font_magic == PSF1_MAGIC)
     {
-        // PSF1 font handling
         ctx->font_type = FONT_PSF1;
         ctx->font_header.psf1 = (struct psf1_header *)_psf2_font_start;
         ctx->font_width = 8;
@@ -111,6 +109,11 @@ void gop_draw_char(struct gop_context *ctx, uint32_t c)
                 }
             }
         }
+        ctx->cursor_x += ctx->font_width;
+        if (ctx->cursor_x + ctx->font_width > ctx->fb->width) {
+            ctx->cursor_x = 0;
+            ctx->cursor_y += ctx->font_height;
+        }
     }
     else
     {
@@ -128,7 +131,6 @@ void gop_draw_char(struct gop_context *ctx, uint32_t c)
         {
             const uint8_t row = glyph[y];
 
-            // Render 8 pixels per row
             for (size_t bit = 0; bit < 8; bit++)
             {
                 const uint8_t mask = 0x80 >> bit;

@@ -36,7 +36,7 @@ ALL_SRCS = $(KERNEL_SRCS) $(LIB_SRCS) $(USERSPACE_SRCS)
 OBJS = $(patsubst src/%,$(BUILD_DIR)/%,$(ALL_SRCS:.c=.o)) $(FONT_OBJ)
 OBJS := $(OBJS:.S=.o)
 
-FONT = src/kern/fonts/gohufont.psf
+FONT = src/kern/fonts/output.psf
 FONT_OBJ = $(BUILD_DIR)/kern/fonts/font.o
 
 PATH_TOOLS := $(abspath tools/bin)
